@@ -1,4 +1,4 @@
 import numpy as np
 
-def Forier_info(time_series):
-    return np.fft.fft(time_series), np.fft.rfft(time_series)
+def Forier_Least_square_info(time_series):
+    return np.fft.fft(time_series), 2*np.pi*np.fft.rfftfreq(time_series)
