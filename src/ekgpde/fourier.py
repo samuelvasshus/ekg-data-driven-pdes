@@ -6,7 +6,7 @@ def fourier_least_squares_info(
     sample_rate: float = 128.0,
     
 
-) -> tuple[np.ndarray, np.ndarray, np.ndarray[(np.ndarray)]]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Compute forier coefficients and correspnding angular frequencies
     Real signal, therefore rfft and rfftfreq with same length.
@@ -19,12 +19,13 @@ def fourier_least_squares_info(
     f_hat_vals = [F(1), F(t)...]
 
     """
+    u_hat = np.fft.rfft(time_series)
+    polynomal_transform_vals = np.zeros(( polynomal_degree_right + 1, len(u_hat)), dtype=complex,)
 
-    polynomal_transform_vals = np.zeros(polynomal_degree_right + 1)
     for i in range (polynomal_degree_right + 1):
         polynomal_transform_vals[i] = np.fft.rfft(time_series**i)
 
 
 
 
-    return np.fft.rfft(time_series), 2*np.pi*np.fft.rfftfreq(len(time_series), 1/sample_rate), polynomal_transform_vals
+    return u_hat, 2*np.pi*np.fft.rfftfreq(len(time_series), 1/sample_rate), polynomal_transform_vals

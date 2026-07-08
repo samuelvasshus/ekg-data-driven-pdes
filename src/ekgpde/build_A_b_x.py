@@ -13,13 +13,13 @@ def build(
     Builds A_matrix for least square methode 
     """
 
-    A = np.zeros(3 + polynomal_degree_right + 1)
+    A = np.zeros((3 + polynomal_degree_right + 1, len(u_hat)),dtype=complex)
 
     for i in range(3):
         A[i] = u_hat*(1j*w)**i
 
     for i in range (polynomal_degree_right + 1):
-        A[3 + i] = f_hat[i]
+        A[3 + i] = -f_hat[i]
 
 
         
