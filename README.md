@@ -9,3 +9,9 @@ Implementerte forier ting:
  og siden reelt signal vil 
  komplekskonjugert bare bli kopi. 
  Derfor bruke rfft og rfftfreq for samme lengde. 
+
+
+Implementere build funskjon:
+
+*Vi kan dele opp polynomet ved å ta antall foriertransformer lik
+ graden til polynomet + 1.
