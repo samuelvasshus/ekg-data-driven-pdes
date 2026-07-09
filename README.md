@@ -15,3 +15,7 @@ Implementere build funskjon:
 
 *Vi kan dele opp polynomet ved å ta antall foriertransformer lik
  graden til polynomet + 1.
+
+Plotte hjerterytmer 10 sek
+*ser ut som det varierer mye med amplitude. Mye med hvor de forskjellige spikes oppstår
+ og i tillegg er det mye variasjon i støy. 
