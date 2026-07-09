@@ -19,3 +19,27 @@ Implementere build funskjon:
 Plotte hjerterytmer 10 sek
 *ser ut som det varierer mye med amplitude. Mye med hvor de forskjellige spikes oppstår
  og i tillegg er det mye variasjon i støy. 
+
+Fremtidig:
+*Leste noe om koplede systemer av diff likninger som reproduserer. Går ann å se på senere.
+
+I tillegg noe om å sette høyreside lik en sum sin og cos. Forier aktig. Og ignorere homogen løsning siden disse går mot 0. Og hvis de divergerer gir ikke det mening heller. Hjerterytme hos en frisk person er jo en stabil prosess. U_k = H(ikw_0)*F(k)
+Men hvis man skal se på unormale hjerteslag er sikkert homogen løsning mer interesann. 
+handler om hvordan systemet forsterker og reduserer forskjellige frekvenser.
+hvis H(ikw) er kompleks får man også faseforskyvning.
+
+U_k omtrent= 1/N * u_hat
+
+Ordenen sier noe om hvor mye intern dynamikk eller hukommelse et system har. 
+
+Planen blir å få det til å fungere med et polynom først. Og deretter kan jeg utforske med sum av sin og cos på høyreside. 
+
+noen ting å huske på:
+
+Hvilke frekvenser:
+samme som fft for time_series
+Da er det hvertfall lett å ta foriertransform og gjøre least square
+Men skal man da gjø least square i det hele tatt?
+
+filtrere bort høye støyfrekvenser.
+Vi bør ikke bruke mange frekvenser. helst samme kompleksitet som venstre side for tolkbarhet. 
