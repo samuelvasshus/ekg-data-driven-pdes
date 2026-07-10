@@ -43,3 +43,7 @@ Men skal man da gjø least square i det hele tatt?
 
 filtrere bort høye støyfrekvenser.
 Vi bør ikke bruke mange frekvenser. helst samme kompleksitet som venstre side for tolkbarhet. 
+
+
+Least squares:
+Har implementert funksjonalitet for least squares slik at det tar hnsyn til hvilken koefisient man setter = 1. Least square returnerer også cost. 
