@@ -21,7 +21,8 @@ def fourier_least_squares_info(
 
     """
     u_hat = np.fft.rfft(time_series)
-    polynomal_transform_vals = np.zeros(( polynomal_degree_right + 1, len(t_vals)), dtype=complex,)
+    lenght_forier_coeficient = len(u_hat)
+    polynomal_transform_vals = np.zeros(( polynomal_degree_right + 1, lenght_forier_coeficient), dtype=complex,)
 
     for i in range (polynomal_degree_right + 1):
         polynomal_transform_vals[i] = np.fft.rfft(t_vals**i)
