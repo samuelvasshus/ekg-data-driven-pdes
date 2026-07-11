@@ -4,6 +4,7 @@ import numpy as np
 def solve_least_square(
     A: np.ndarray,
     b: np.ndarray,
+    coeficient_equal_1: int,
     
     )-> tuple[np.ndarray, float]:
 
@@ -31,6 +32,7 @@ def solve_least_square(
 
     x = (np.linalg.inv((A.conj().T)@A))@(A.conj().T)@b
     cost = np.sum(((np.abs(A@x-b))**2))
+    x = np.insert(x, coeficient_equal_1, 1)
     return x, cost
 
     

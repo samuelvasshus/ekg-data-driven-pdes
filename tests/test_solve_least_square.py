@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 from ekgpde.fourier import fourier_least_squares_info
 from ekgpde.build_A_b_x import build
+from ekgpde.solve_least_squares import solve_least_square
 
 from ekgpde import parameters
 
@@ -21,15 +22,17 @@ time_series = ecg_signals[0]
 record_name = record_names[0]
 
 
-
+coeficient_equal_1 = 1
 DFT_coef, omegas, DFT_right_side = fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
 
-A, b = build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,1)
+A, b = build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
 
-print("A:")
-print(A.shape)
-print(A)
+u, cost = solve_least_square(A, b, coeficient_equal_1)
 
-print("b:")
-print(b.shape)
-print(b)
+print("u:")
+print(u.shape)
+print(u)
+
+print("cost:")
+print(cost.shape)
+print(cost)
