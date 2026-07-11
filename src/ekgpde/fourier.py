@@ -2,6 +2,7 @@ import numpy as np
 
 def fourier_least_squares_info(
     time_series: np.ndarray,
+    t_vals: np.ndarray,
     polynomal_degree_right: int,
     sample_rate: float = 128.0,
     
@@ -20,10 +21,10 @@ def fourier_least_squares_info(
 
     """
     u_hat = np.fft.rfft(time_series)
-    polynomal_transform_vals = np.zeros(( polynomal_degree_right + 1, len(u_hat)), dtype=complex,)
+    polynomal_transform_vals = np.zeros(( polynomal_degree_right + 1, len(t_vals)), dtype=complex,)
 
     for i in range (polynomal_degree_right + 1):
-        polynomal_transform_vals[i] = np.fft.rfft(time_series**i)
+        polynomal_transform_vals[i] = np.fft.rfft(t_vals**i)
 
 
 

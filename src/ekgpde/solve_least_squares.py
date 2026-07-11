@@ -29,8 +29,8 @@ def solve_least_square(
     #left_side = np.transpose(A)@A
     #right_side = 
 
-    x = (np.invert(np.transpose(A)@A))@np.transpose(A)*b
-    cost = np.sum((A@x-b)**2)
+    x = (np.linalg.inv((A.conj().T)@A))@(A.conj().T)@b
+    cost = np.sum(((np.abs(A@x-b))**2))
     return x, cost
 
     
