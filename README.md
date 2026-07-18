@@ -47,3 +47,7 @@ Vi bør ikke bruke mange frekvenser. helst samme kompleksitet som venstre side f
 
 Least squares:
 Har implementert funksjonalitet for least squares slik at det tar hnsyn til hvilken koefisient man setter = 1. Least square returnerer også cost. 
+
+Første resultat:
+
+Ser ut til å fungere relativt greit. Det er hvertfall riktig størrelsesorden. Litt usikker på det at difflikningen blir kompleks. Er dette siden realdelen av en kompleks difflikning er den beste løsningen, eller er det siden det er så mye støy i dataen. imaginære tall introduserer jo ofte mer sin og cos vil jeg tro, og det kan jo gi mening med EKG som er periodisk. Jeg vil tro at det å ta med imaginære delen blir litt likt som å ha et system av difflikninger. Det blir jo feil men kanskje det kan være interessant. 
