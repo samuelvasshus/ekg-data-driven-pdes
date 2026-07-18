@@ -51,3 +51,14 @@ Har implementert funksjonalitet for least squares slik at det tar hnsyn til hvil
 Første resultat:
 
 Ser ut til å fungere relativt greit. Det er hvertfall riktig størrelsesorden. Litt usikker på det at difflikningen blir kompleks. Er dette siden realdelen av en kompleks difflikning er den beste løsningen, eller er det siden det er så mye støy i dataen. imaginære tall introduserer jo ofte mer sin og cos vil jeg tro, og det kan jo gi mening med EKG som er periodisk. Jeg vil tro at det å ta med imaginære delen blir litt likt som å ha et system av difflikninger. Det blir jo feil men kanskje det kan være interessant. 
+
+
+En feil!
+
+Ikke glattet ut i staten. Når jeg rekner ut initialverdiene blir de utrolig støyete. Jeg må rekne deriverte på en eller annen måte slik at støyen ikke påvirker. Det gjør at hele greia divergerer.
+
+Det virker som om kost funksjonen er feil. Når jeg plotter og ser hva som passer best visuelt, sier costfunksjonen noe helt annet. 
+
+Jeg hadde nå konstan på venstre og konstant på høyre siden polynomaldegree right var 1 automatisk. Får fikse det etterpå. Men kanskje var dette riktig. At jeg hadde litt flaks. Egentlig misforstod jeg, men formen på difflikningen ble a1u + a2u_t + a3u_tt = a4, som var det jeg ville ha. når pol degree = 1. altså konstant. Når jeg setter a2 = 1, får jeg bedre løsning enn a1 = 1. mister periodisitet. 
+
+når a3 tvinges lik 1 divergerer løsningen mot uendelig. 
