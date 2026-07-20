@@ -34,7 +34,7 @@ RECORD_NAMES = [
 ]
 
 START_SECOND = 60.0
-DURATION_SECONDS = 10.0
+DURATION_SECONDS = 20.0
 LEAD_INDEX = 0
 
 OUTPUT_PATH = Path("data/processed/nsrdb_18_records_10s.npz")

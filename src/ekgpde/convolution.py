@@ -22,6 +22,6 @@ def convolution_gaussian(
         convolution_result[i + convolution_degree] = np.dot(sliced, weights)
 
     convolution_result = convolution_result[convolution_degree:(len(convolution_result)-convolution_degree)]
-
+    print(weights)
 
     return convolution_result

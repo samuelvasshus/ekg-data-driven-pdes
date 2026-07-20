@@ -18,7 +18,7 @@ time = data["time"]
 record_names = data["record_names"]
 sampling_rate = data["sampling_rate"]
 #len(ecg_signals)
-for series_index in range(1):
+for series_index in range(5):
     time_series = ecg_signals[series_index]
     record_name = record_names[series_index]
 
@@ -30,6 +30,9 @@ for series_index in range(1):
     A, b = build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
 
     u_coeficients, cost = solve_least_square(A, b, coeficient_equal_1)
+
+    print("Cost:")
+    print(cost)
 
     #2. ordens
     # Y_(n+1) = y'(n)*delta_t + Y_n = [y_t, -(a_1 + a_2*y + a_3*y_t) ]*delta_t
