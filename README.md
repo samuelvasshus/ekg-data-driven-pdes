@@ -62,3 +62,8 @@ Det virker som om kost funksjonen er feil. Når jeg plotter og ser hva som passe
 Jeg hadde nå konstan på venstre og konstant på høyre siden polynomaldegree right var 1 automatisk. Får fikse det etterpå. Men kanskje var dette riktig. At jeg hadde litt flaks. Egentlig misforstod jeg, men formen på difflikningen ble a1u + a2u_t + a3u_tt = a4, som var det jeg ville ha. når pol degree = 1. altså konstant. Når jeg setter a2 = 1, får jeg bedre løsning enn a1 = 1. mister periodisitet. 
 
 når a3 tvinges lik 1 divergerer løsningen mot uendelig. 
+
+Bør ha prosentvis skalering for lossfunksjon. Eller noe liknende, siden jeg bare er interessert i å matche shape. I starten skal hvertfall alt være likemye vektlagt å komme nærme.
+
+
+Fikset at konstant kom riktig fremfor ikke bak.

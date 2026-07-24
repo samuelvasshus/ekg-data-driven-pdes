@@ -20,12 +20,22 @@ time = time_original[0:int(len(time_original)/2)]
 record_names = data["record_names"]
 sampling_rate = data["sampling_rate"]
 #len(ecg_signals)
-for series_index in range(5):
-    time_series_original = ecg_signals[series_index]
+for series_index in range(1):
+    time_series_original = np.zeros(len(time_original), dtype= complex)
+    for i in range (len(time_series_original)):
+        t = time_original[i] - time[0]
+        time_series_original[i] = np.exp(-t / 2) * (
+        np.cos(np.sqrt(3) * t / 2)
+    +   np.sin(np.sqrt(3) * t / 2)
+)
+    print("time_series")
+    print(time_series_original)
+    print("time")
+    print(time)
     time_series = time_series_original[0:int(len(time_series_original)/2)]
-    time_series_original = convolution_gaussian(time_series_original, 2, 3)
+    time_series_original = convolution_gaussian(time_series_original, 1, 2)
     record_name = record_names[series_index]
-    time_series = convolution_gaussian(time_series, 2, 3)
+    time_series = convolution_gaussian(time_series, 1, 2)
 
 
 
@@ -144,5 +154,33 @@ for series_index in range(5):
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+
+
+A = np.array([
+    [1.0,  2.0],
+    [3.0,  1.0],
+    [-1.0, 4.0],
+    [2.0, -2.0],
+])
+
+b = np.array([0.0, 5.0, -6.0, 6.0])
+
+A_1 = np.array([
+    [1.0,  2.0],
+    [3.0, -1.0],
+    [-2.0, 4.0],
+    [5.0,  1.0],
+])
+
+b1 = np.array([4.0, 5.0, 0.0, 11.0])
+
+x_test_func = solve_least_square(A, b,0 )
+x_test_nocoef = (np.linalg.inv((A.conj().T)@A))@(A.conj().T)@b
+print("Xfunc and x_express:")
+print(x_test_func)
+print(x_test_nocoef)
+
+
+
 
 

@@ -24,11 +24,14 @@ def build(
     A = np.zeros((3 + polynomal_degree_right + 1, len(u_hat)),dtype=complex)
 
     
-    for i in range(3):
-        A[i] = u_hat*(1j*w)**i
+    
 
+    A = np.zeros((3 + polynomal_degree_right + 1, len(u_hat)),dtype=complex)
     for i in range (polynomal_degree_right + 1):
-        A[3 + i] = -f_hat[i]
+        A[i] = -f_hat[i]
+
+    for i in range(3):
+        A[i + polynomal_degree_right + 1] = u_hat*(1j*w)**i
 
 
         
