@@ -23,13 +23,14 @@ sampling_rate = data["sampling_rate"]
 for series_index in range(5):
     time_series_original = ecg_signals[series_index]
     time_series = time_series_original[0:int(len(time_series_original)/2)]
-    time_series_original = convolution_gaussian(time_series_original, 2, 3)
+    time_series_original = convolution_gaussian(time_series_original, 5, 10)
     record_name = record_names[series_index]
-    time_series = convolution_gaussian(time_series, 2, 3)
+    time_series = convolution_gaussian(time_series, 5, 10)
 
 
 
     coeficient_equal_1 = 1
+   
     DFT_coef, omegas, DFT_right_side = fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
 
     A, b = build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
@@ -52,6 +53,8 @@ for series_index in range(5):
     t = 0
 
     #Y = np.array([time_series[0], derivative(time_series, 0, 1, dt)])
+    #print("Deriv value:")
+    #print(derivative(time_series, 0, 1, dt))
     Y = np.array([time_series[0], 0])
     Y_vals = [Y.copy()]
 
@@ -61,6 +64,7 @@ for series_index in range(5):
     print("Y_0/ Y, Y_t, Y_tt:")
     print([Y[0], Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )]) 
     while (t<(time_original[-1])):
+        #/Y_coef[3]
         Y = np.array([Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )])*dt + Y 
         Y_vals.append(Y.copy())
         t += dt

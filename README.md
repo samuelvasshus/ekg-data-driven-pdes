@@ -67,3 +67,9 @@ Bør ha prosentvis skalering for lossfunksjon. Eller noe liknende, siden jeg bar
 
 
 Fikset at konstant kom riktig fremfor ikke bak.
+
+Build fungerer. Testet på lite analytisk tilfelle. 
+
+Formel er riktig så lenge jeg bruker komplexkonjugert. Da vil alt fungere likt som for reel linalg. 
+
+Har konkludert med å bare bruke 0 for derivert i starten. Det gir mening ut fra EKG_bildene. Slipper å ta hensyn til all støyen. 

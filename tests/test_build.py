@@ -34,8 +34,15 @@ print("b:")
 print(b.shape)
 print(b)
 
-A1, b = build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,1)
+DFT_coef, omegas, DFT_right_side = np.ones(5, dtype=complex), np.ones(5, dtype=complex), np.ones(5, dtype=complex)
+
+
+A1, b1 = build(DFT_right_side, omegas, DFT_right_side, parameters.polynomal_degree_right,1)
 
 print("A1:")
-print(A.shape)
-print(A)
+print(A1.shape)
+print(A1)
+
+print("b1:")
+print(b1.shape)
+print(b1)

@@ -26,23 +26,40 @@ def build(
     
     
 
+    #Her er j komplex og i index. Litt forvirrende notasjon. 
     A = np.zeros((3 + polynomal_degree_right + 1, len(u_hat)),dtype=complex)
     for i in range (polynomal_degree_right + 1):
-        A[i] = -f_hat[i]
+        A[i] = f_hat[i]
 
     for i in range(3):
         A[i + polynomal_degree_right + 1] = u_hat*(1j*w)**i
-
-
-        
+    
 
     #Tar transponert for å få Matriseegenskaper
     A = np.transpose(A)
 
-    b = -A[:, coeficient_equalto_1].copy()
+    A_real = np.vstack([
+        A.real,
+        A.imag,
+    ]) 
+    print("Shape A_real")
+    print(A_real.shape)
+
+    
+
+
+        
+
+    
+
+    b_real = -A_real[:, coeficient_equalto_1].copy()
+    
+    print("Shape b_real")
+    print(b_real.shape)
+    
     #b= np.delete(b, coeficient_equalto_1)
-    A = np.delete(A, coeficient_equalto_1, axis=1)
+    A_real = np.delete(A_real, coeficient_equalto_1, axis=1)
 
 
-    return A, b
+    return A_real, b_real
     
