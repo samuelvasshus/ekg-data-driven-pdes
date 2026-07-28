@@ -21,25 +21,33 @@ record_names = data["record_names"]
 sampling_rate = data["sampling_rate"]
 #len(ecg_signals)
 for series_index in range(1):
-    time_series_original = np.zeros(len(time_original), dtype= complex)
+    time_series_original = np.zeros(len(time_original))
     for i in range (len(time_series_original)):
         t = time_original[i] - time[0]
-        time_series_original[i] = np.exp(-t / 2) * (
+        time_series_original[i] = np.cos(
+    2 * np.pi * t / 10
+)
+        
+        
+        """np.exp(-t / 2) * (
         np.cos(np.sqrt(3) * t / 2)
     +   np.sin(np.sqrt(3) * t / 2)
-)
+)"""
     print("time_series")
     print(time_series_original)
     print("time")
     print(time)
     time_series = time_series_original[0:int(len(time_series_original)/2)]
-    time_series_original = convolution_gaussian(time_series_original, 1, 2)
+    
+    time_series_original = convolution_gaussian(time_series_original, 1, 1)
+    
     record_name = record_names[series_index]
-    time_series = convolution_gaussian(time_series, 1, 2)
+    
+    time_series = convolution_gaussian(time_series, 1, 1)
 
 
 
-    coeficient_equal_1 = 1
+    coeficient_equal_1 = 3
     DFT_coef, omegas, DFT_right_side = fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
 
     A, b = build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
@@ -62,7 +70,12 @@ for series_index in range(1):
     t = 0
 
     #Y = np.array([time_series[0], derivative(time_series, 0, 1, dt)])
-    Y = np.array([time_series[0], 0])
+    Y = np.array([time_series[4], derivative(time_series, 4, 1, dt)])
+    print("Der 1. nd 2.")
+    print(derivative(time_series, 4, 1, dt))
+    print(derivative(time_series, 4, 2, dt))
+    
+    
     Y_vals = [Y.copy()]
 
     t = time[0]
@@ -70,8 +83,14 @@ for series_index in range(1):
     #Lite effektivt siden lager nye arrayer hele tiden. Kan fikses senere hvis det blir problem.
     print("Y_0/ Y, Y_t, Y_tt:")
     print([Y[0], Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )]) 
+    print("Uten deling og med deling")
+    print(-(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] ))
+    print(-(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )/Y_coef[3])
+    print("Coefs")
+    print(Y_coef)
     while (t<(time_original[-1])):
-        Y = np.array([Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )])*dt + Y 
+        
+        Y = np.array([Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )/Y_coef[3]])*dt + Y 
         Y_vals.append(Y.copy())
         t += dt
         t_vals = np.append(t_vals, t)

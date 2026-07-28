@@ -47,7 +47,10 @@ for series_index in range(5):
     Y_coef = np.zeros((len(u_coeficients)), dtype=complex)
     for i in range (len(u_coeficients)):
         Y_coef[i] = u_coeficients[i]
+    print("Y_coef:")
+    print(Y_coef)
     #kortere intervaller enn puls i EKG
+
 
     dt = time[1]- time[0]
     t = 0
@@ -62,8 +65,11 @@ for series_index in range(5):
     t_vals = np.array([time[0]])
     #Lite effektivt siden lager nye arrayer hele tiden. Kan fikses senere hvis det blir problem.
     print("Y_0/ Y, Y_t, Y_tt:")
-    print([Y[0], Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )]) 
-    while (t<(time_original[-1])):
+    print([Y[0], Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )])
+    print("Coefs:")
+    print(Y_coef)
+    #time_original[-1])
+    while (t<70):
         #/Y_coef[3]
         Y = np.array([Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )])*dt + Y 
         Y_vals.append(Y.copy())
@@ -111,7 +117,7 @@ for series_index in range(5):
 
     for i, coefficient in enumerate(Y_coef):
         if np.isclose(coefficient, 0):
-            continue
+            coefficient = 0.0
 
         if i == 0:
             term = f"{abs(coefficient):.3g}"
