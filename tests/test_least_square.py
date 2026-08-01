@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from ekgpde.convolution import convolution_gaussian
 from ekgpde.fourier import fourier_least_squares_info
 from ekgpde.build_A_b_x import build
+from ekgpde.new_build_Abx import new_build
 from ekgpde.solve_least_squares import solve_least_square
 from ekgpde.derivative import derivative
 
@@ -24,33 +25,33 @@ for series_index in range(1):
     time_series_original = np.zeros(len(time_original))
     for i in range (len(time_series_original)):
         t = time_original[i] - time[0]
-        time_series_original[i] = np.cos(
-    2 * np.pi * t / 10
-)
+        time_series_original[i] = np.exp(-t / 2) * (
+            np.cos(np.sqrt(3) * t / 2)
+        +   np.sin(np.sqrt(3) * t / 2)
+    )
         
+#"""np.cos(
+#    2 * np.pi * t / 10
+#)"""
         
-        """np.exp(-t / 2) * (
-        np.cos(np.sqrt(3) * t / 2)
-    +   np.sin(np.sqrt(3) * t / 2)
-)"""
     print("time_series")
     print(time_series_original)
     print("time")
     print(time)
     time_series = time_series_original[0:int(len(time_series_original)/2)]
     
-    time_series_original = convolution_gaussian(time_series_original, 1, 10)
+    #time_series_original = convolution_gaussian(time_series_original, 1, 10)
     
     record_name = record_names[series_index]
     
-    time_series = convolution_gaussian(time_series, 5, 10)
+    #time_series = convolution_gaussian(time_series, 5, 10)
 
 
 
-    coeficient_equal_1 = 3
+    coeficient_equal_1 = 1
     DFT_coef, omegas, DFT_right_side = fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
 
-    A, b = build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
+    A, b = new_build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
 
     u_coeficients, cost = solve_least_square(A, b, coeficient_equal_1)
 
@@ -135,7 +136,7 @@ for series_index in range(1):
     terms = []
 
     for i, coefficient in enumerate(Y_coef):
-        if np.isclose(coefficient, 0):
+        if abs(coefficient) < 0.001:
             continue
 
         if i == 0:

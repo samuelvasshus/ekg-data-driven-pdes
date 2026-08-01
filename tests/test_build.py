@@ -6,6 +6,7 @@ from ekgpde.fourier import fourier_least_squares_info
 from ekgpde.build_A_b_x import build
 
 from ekgpde import parameters
+from ekgpde.new_build_Abx import new_build
 
 data = np.load("data/processed/nsrdb_18_records_10s.npz")
 
@@ -24,7 +25,7 @@ record_name = record_names[0]
 
 DFT_coef, omegas, DFT_right_side = fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
 
-A, b = build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,1)
+A, b = new_build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,1)
 
 print("A:")
 print(A.shape)
@@ -34,10 +35,11 @@ print("b:")
 print(b.shape)
 print(b)
 
+"""
 DFT_coef, omegas, DFT_right_side = np.ones(5, dtype=complex), np.ones(5, dtype=complex), np.ones(5, dtype=complex)
 
 
-A1, b1 = build(DFT_right_side, omegas, DFT_right_side, parameters.polynomal_degree_right,1)
+A1, b1 = new_build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,1)
 
 print("A1:")
 print(A1.shape)
@@ -46,3 +48,4 @@ print(A1)
 print("b1:")
 print(b1.shape)
 print(b1)
+"""
