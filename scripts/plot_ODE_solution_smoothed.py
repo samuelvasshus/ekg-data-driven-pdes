@@ -23,9 +23,9 @@ sampling_rate = data["sampling_rate"]
 for series_index in range(5):
     time_series_original = ecg_signals[series_index]
     time_series = time_series_original[0:int(len(time_series_original)/2)]
-    time_series_original = convolution_gaussian(time_series_original, 5, 10)
+    #time_series_original = convolution_gaussian(time_series_original, 5, 10)
     record_name = record_names[series_index]
-    time_series = convolution_gaussian(time_series, 5, 10)
+    #time_series = convolution_gaussian(time_series, 5, 10)
 
 
 
@@ -71,7 +71,7 @@ for series_index in range(5):
     #time_original[-1])
     while (t<70):
         #/Y_coef[3]
-        Y = np.array([Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )])*dt + Y 
+        Y = np.array([Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )/Y_coef[3]])*dt + Y 
         Y_vals.append(Y.copy())
         t += dt
         t_vals = np.append(t_vals, t)

@@ -39,11 +39,11 @@ for series_index in range(1):
     print(time)
     time_series = time_series_original[0:int(len(time_series_original)/2)]
     
-    time_series_original = convolution_gaussian(time_series_original, 1, 1)
+    time_series_original = convolution_gaussian(time_series_original, 1, 10)
     
     record_name = record_names[series_index]
     
-    time_series = convolution_gaussian(time_series, 1, 1)
+    time_series = convolution_gaussian(time_series, 5, 10)
 
 
 

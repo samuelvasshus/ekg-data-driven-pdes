@@ -7,9 +7,11 @@ def derivative(
         power: int,
         dt: float,
 ) -> int:
-    if (power==1):
+    if (power == 0):
+        return time_series[index]
+    elif (power==1):
         return (time_series[index + 1]-time_series[index])/dt
     elif (power==2):
         return (time_series[index + 2]-2*time_series[index + 1] + time_series[index])/(dt**2)
     else:
-        return 0
+        return None

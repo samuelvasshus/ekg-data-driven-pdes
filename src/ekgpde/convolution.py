@@ -15,7 +15,7 @@ def convolution_gaussian(
     weights = weights/weights.sum()
 
     
-    time_series_expanded = np.pad(time_series, pad_width=convolution_degree, mode="constant", constant_values=0)
+    time_series_expanded = np.pad(time_series, pad_width=convolution_degree, mode="edge")
     convolution_result=np.zeros(len(time_series_expanded))
     for i in range (len(time_series)):
         sliced = time_series_expanded[i:i+2*convolution_degree+1]
