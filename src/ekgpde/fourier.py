@@ -1,5 +1,6 @@
 import numpy as np
 
+from ekgpde import parameters
 from ekgpde.derivative import derivative
 
 def fourier_least_squares_info(
@@ -22,8 +23,9 @@ def fourier_least_squares_info(
     f_hat_vals = [F(1), F(t)...]
 
     """
-    u_derivs = np.zeros((3, len(time_series)))
-    u_hat_derivs = np.zeros((3, len(time_series)//2 + 1), dtype=complex)
+    degree_diff_eqn = parameters.degree_of_differential_equation + 1
+    u_derivs = np.zeros((degree_diff_eqn, len(time_series)))
+    u_hat_derivs = np.zeros((degree_diff_eqn, len(time_series)//2 + 1), dtype=complex)
     for i in range(len(u_derivs)):
         for a in range(len(time_series)):
             if (a > len(time_series)-i-1):

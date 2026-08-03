@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from ekgpde.convolution import convolution_gaussian
 from ekgpde.fourier import fourier_least_squares_info
 from ekgpde.build_A_b_x import build
+from ekgpde.new_build_Abx import new_build
 from ekgpde.solve_least_squares import solve_least_square
 from ekgpde.derivative import derivative
 
@@ -20,12 +21,12 @@ time = time_original[0:int(len(time_original)/2)]
 record_names = data["record_names"]
 sampling_rate = data["sampling_rate"]
 #len(ecg_signals)
-for series_index in range(5):
+for series_index in range(3):
     time_series_original = ecg_signals[series_index]
     time_series = time_series_original[0:int(len(time_series_original)/2)]
-    #time_series_original = convolution_gaussian(time_series_original, 5, 10)
+    time_series_original = convolution_gaussian(time_series_original, 5, 10)
     record_name = record_names[series_index]
-    #time_series = convolution_gaussian(time_series, 5, 10)
+    time_series = convolution_gaussian(time_series, 15, 30)
 
 
 
@@ -33,7 +34,7 @@ for series_index in range(5):
    
     DFT_coef, omegas, DFT_right_side = fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
 
-    A, b = build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
+    A, b = new_build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
 
     u_coeficients, cost = solve_least_square(A, b, coeficient_equal_1)
 
@@ -58,20 +59,38 @@ for series_index in range(5):
     #Y = np.array([time_series[0], derivative(time_series, 0, 1, dt)])
     #print("Deriv value:")
     #print(derivative(time_series, 0, 1, dt))
-    Y = np.array([time_series[0], 0])
+    Y = np.zeros((parameters.degree_of_differential_equation))
+    Y[0] = time_series[0]
     Y_vals = [Y.copy()]
 
     t = time[0]
     t_vals = np.array([time[0]])
     #Lite effektivt siden lager nye arrayer hele tiden. Kan fikses senere hvis det blir problem.
-    print("Y_0/ Y, Y_t, Y_tt:")
-    print([Y[0], Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )])
-    print("Coefs:")
-    print(Y_coef)
+    #print("Y_0/ Y, Y_t, Y_tt:")
+    #print([Y[0], Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )/Y_coef[3]])
+    #print("Coefs:")
+    #print(Y_coef)
     #time_original[-1])
-    while (t<70):
+    while (t<time_original[-1]):
         #/Y_coef[3]
-        Y = np.array([Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )/Y_coef[3]])*dt + Y 
+        Y_old = Y.copy()
+        for i in range(parameters.degree_of_differential_equation):
+            
+            if (i == parameters.degree_of_differential_equation-1):
+                Y_tt = 0
+                for a in range(len(Y_coef)):
+                    if (a == 0):
+                        Y_tt -= Y_coef[a]
+                    elif (a == len(Y_coef)-1):
+                        Y_tt = Y_tt/Y_coef[a]
+                    else:
+                        Y_tt -= Y_coef[a]*Y_old[a-1]
+                Y[i] = Y_tt*dt + Y_old[i]
+            else:
+                Y[i] = Y[i+1]*dt + Y_old[i]
+
+
+        #Y = np.array([Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )/Y_coef[3]])*dt + Y 
         Y_vals.append(Y.copy())
         t += dt
         t_vals = np.append(t_vals, t)

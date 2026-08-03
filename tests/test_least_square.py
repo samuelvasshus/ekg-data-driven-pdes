@@ -40,15 +40,15 @@ for series_index in range(1):
     print(time)
     time_series = time_series_original[0:int(len(time_series_original)/2)]
     
-    #time_series_original = convolution_gaussian(time_series_original, 1, 10)
+    #time_series_original = convolution_gaussian(time_series_original, 3, 5)
     
     record_name = record_names[series_index]
     
-    #time_series = convolution_gaussian(time_series, 5, 10)
+    #time_series = convolution_gaussian(time_series, 1, 3)
 
 
 
-    coeficient_equal_1 = 1
+    coeficient_equal_1 = 2
     DFT_coef, omegas, DFT_right_side = fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
 
     A, b = new_build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
@@ -71,10 +71,10 @@ for series_index in range(1):
     t = 0
 
     #Y = np.array([time_series[0], derivative(time_series, 0, 1, dt)])
-    Y = np.array([time_series[4], derivative(time_series, 4, 1, dt)])
+    Y = np.array([time_series[4], derivative(time_series, 4, 1, dt), derivative(time_series, 4, 2, dt), derivative(time_series, 4, 3, dt)]) 
     print("Der 1. nd 2.")
-    print(derivative(time_series, 4, 1, dt))
-    print(derivative(time_series, 4, 2, dt))
+    #print(derivative(time_series, 4, 1, dt))
+    #print(derivative(time_series, 4, 2, dt))
     
     
     Y_vals = [Y.copy()]
@@ -82,6 +82,7 @@ for series_index in range(1):
     t = time[0]
     t_vals = np.array([time[0]])
     #Lite effektivt siden lager nye arrayer hele tiden. Kan fikses senere hvis det blir problem.
+    """
     print("Y_0/ Y, Y_t, Y_tt:")
     print([Y[0], Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )]) 
     print("Uten deling og med deling")
@@ -89,9 +90,28 @@ for series_index in range(1):
     print(-(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )/Y_coef[3])
     print("Coefs")
     print(Y_coef)
+    """
     while (t<(time_original[-1])):
+
+        Y_old = Y.copy()
+        for i in range(parameters.degree_of_differential_equation):
+            
+            if (i == parameters.degree_of_differential_equation-1):
+                Y_tt = 0
+                for a in range(len(Y_coef)):
+                    if (a == 0):
+                        Y_tt -= Y_coef[a]
+                    elif (a == len(Y_coef)-1):
+                        Y_tt = Y_tt/Y_coef[a]
+                    else:
+                        Y_tt -= Y_coef[a]*Y_old[a-1]
+                Y[i] = Y_tt*dt + Y_old[i]
+            else:
+                Y[i] = Y[i+1]*dt + Y_old[i]
         
-        Y = np.array([Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )/Y_coef[3]])*dt + Y 
+        
+        
+        #Y = np.array([Y[1], -(Y_coef[0] + Y_coef[1]*Y[0] + Y_coef[2]*Y[1] )/Y_coef[3]])*dt + Y 
         Y_vals.append(Y.copy())
         t += dt
         t_vals = np.append(t_vals, t)
@@ -143,11 +163,18 @@ for series_index in range(1):
             term = f"{abs(coefficient):.3g}"
         elif i == 1:
             term = f"{abs(coefficient):.3g}Y"
+        else:
+            derivative_subscript = "t" * (i - 1)
+            term = f"{abs(coefficient):.3g}Y_{{{derivative_subscript}}}"
+
+
+        """elif i == 1:
+            term = f"{abs(coefficient):.3g}Y"
         elif i == 2:
             term = f"{abs(coefficient):.3g}Y_t"
         else:
             term = f"{abs(coefficient):.3g}Y_{{t^{i - 1}}}"
-
+"""
         if len(terms) == 0:
             terms.append(("-" if coefficient < 0 else "") + term)
         else:

@@ -2,5 +2,6 @@
 
 #Polynomgrad høyre side grad
 polynomal_degree_right = 0
+degree_of_differential_equation = 3
 
 

@@ -30,3 +30,4 @@ print(omegas)
 print("Shape and DFT right side")
 print(DFT_right_side.shape)
 print(DFT_right_side)
+
