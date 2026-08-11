@@ -6,6 +6,7 @@ from ekgpde.convolution import convolution_gaussian
 from ekgpde.fourier import fourier_least_squares_info
 from ekgpde.build_A_b_x import build
 from ekgpde.new_build_Abx import new_build
+from ekgpde.old_forierinfo import old_fourier_least_squares_info
 from ekgpde.solve_least_squares import solve_least_square
 from ekgpde.derivative import derivative
 
@@ -21,42 +22,42 @@ time = time_original[0:int(len(time_original)/2)]
 record_names = data["record_names"]
 sampling_rate = data["sampling_rate"]
 #len(ecg_signals)
-for series_index in range(3):
+for series_index in range(1):
     time_series_original = ecg_signals[series_index]
     time_series = time_series_original[0:int(len(time_series_original)/2)]
-    time_series_original = convolution_gaussian(time_series_original, 2, 3)
+    time_series_original = convolution_gaussian(time_series_original, 5, 10)
     record_name = record_names[series_index]
-    time_series = convolution_gaussian(time_series, 2, 3)
+    time_series = convolution_gaussian(time_series, 5, 10)
 
+    
+    
 
 
     coeficient_equal_1 = 1
    
-    DFT_coef, omegas, DFT_right_side = fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
-
-    frequency = 5
-
-    DFT_coef_copy = np.zeros(DFT_coef.shape, dtype=complex)
-
+    DFT_coef, omegas, DFT_right_side = old_fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
+    DFT_coef_copy = np.zeros((len(DFT_coef)), dtype=complex)
     i = 0
 
-    while i < len(DFT_coef):
+    print("DFT shape:")
+    print(DFT_coef.shape)
 
-        a = 0
+    print("omega shape:")
+    print(omegas.shape)
 
-        while a < len(DFT_coef[i]):
+    #Man kan analytisk komme frem til at iw^n metoden skal begynne å konvergere for frekvens under 25
+    frequency = 1
 
-            if a <= (len(DFT_coef[i]) - 1) * frequency / 64:
-                DFT_coef_copy[i][a] = DFT_coef[i][a]
-            else:
-                DFT_coef_copy[i][a] = 0
-
-            a += 1
-
-        i += 1
 
     
-    A, b = new_build(DFT_coef_copy, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
+    while (i < len(DFT_coef)):
+        if (i < len(DFT_coef)*frequency/64):
+            DFT_coef_copy[i] = DFT_coef[i]
+        else:
+            DFT_coef_copy[i] = 0
+        i +=1
+
+    A, b = build(DFT_coef_copy, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
 
     u_coeficients, cost = solve_least_square(A, b, coeficient_equal_1)
 
@@ -95,6 +96,7 @@ for series_index in range(3):
     #print("Coefs:")
     #print(Y_coef)
     #time_original[-1])
+    
     while (t<time_original[-1]):
         #/Y_coef[3]
         Y_old = Y.copy()

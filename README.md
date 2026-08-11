@@ -73,3 +73,6 @@ Build fungerer. Testet på lite analytisk tilfelle.
 Formel er riktig så lenge jeg bruker komplexkonjugert. Da vil alt fungere likt som for reel linalg. 
 
 Har konkludert med å bare bruke 0 for derivert i starten. Det gir mening ut fra EKG_bildene. Slipper å ta hensyn til all støyen. 
+
+
+Vi ser ut fra plots at frekvenser rundt under 25 er der iw fungerer. Dette kan vi også se i programmet plot_iw.... 
