@@ -24,12 +24,3 @@ def solve_least_squares(
     coefficients = np.insert(x, fixed_column, 1.0)
     return coefficients, cost
 
-#Must be accounted for:
-""" Må unngå 0-løsning
-Tror jeg må lage en ny formel for
-least square siden c1 = 1 tvinger
-frem noe. Men samtidig kan jo likningen alltid skaleres. 
-#Vi mister ikke noe info hvis det skjer
-Jeg synes også det gir mye mer mening å ha noe periodisk på høyreside som sin og cos. 
-Det virker hvertfall helt feil å ha lav orden polynom'''
- """
