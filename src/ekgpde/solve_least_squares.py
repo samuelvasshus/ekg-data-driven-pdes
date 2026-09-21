@@ -1,32 +1,6 @@
 import numpy as np
 import numpy.typing as npt
 
-
-def solve_least_square_old(
-    A: np.ndarray,
-    b: np.ndarray,
-    coeficient_equal_1: int,
-    
-    )-> tuple[np.ndarray, float]:
-
-    """
-    Solves least square, setting coeficient at index "coeficient_equalto_1" = 1.
-    Solves least square of Ax=b. 
-
-    
-    returns solution to leas square problem. 
-    also returns least_square_cost 
-    
-    """
-
-    #left_side = np.transpose(A)@A
-    #right_side = 
-
-    x = (np.linalg.inv((A.conj().T)@A))@(A.conj().T)@b
-    cost = np.sum(((np.abs(A@x-b))**2))
-    x = np.insert(x, coeficient_equal_1, 1)
-    return x, cost
-
 def solve_least_squares(
     A: npt.NDArray[np.float64],
     b: npt.NDArray[np.float64],
