@@ -1,6 +1,7 @@
+from math import comb
+
 import numpy as np
 import numpy.typing as npt
-from math import comb
 
 
 def _forward_difference(

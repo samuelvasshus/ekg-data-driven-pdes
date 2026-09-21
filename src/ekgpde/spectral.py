@@ -2,6 +2,7 @@ import numpy as np
 import numpy.typing as npt
 from ekgpde.differentiation import differentiate
 
+
 def polynomial_transforms(
     t_vals: npt.NDArray[np.float64],
     degree: int,
@@ -12,6 +13,7 @@ def polynomial_transforms(
         Array of shape (degree + 1, len(t_vals)//2 + 1): [F(1), F(t), ...].
     """
     return np.array([np.fft.rfft(t_vals**k) for k in range(degree + 1)])
+
 
 #periodic assumption
 def spectral_derivatives(
@@ -35,11 +37,12 @@ def spectral_derivatives(
     """
     dt = t_vals[1] - t_vals[0]
     u_hat = np.fft.rfft(time_series)
-    
+
     omegas = 2*np.pi*np.fft.rfftfreq(len(time_series), dt)
     u_hat_derivs = np.array([(1j*omegas)**n * u_hat for n in range(order + 1)])
-    
+
     return u_hat_derivs, omegas, polynomial_transforms(t_vals, polynomial_degree)
+
 
 #non-periodic requirement
 def finite_difference_derivatives(
@@ -50,7 +53,7 @@ def finite_difference_derivatives(
 ) -> tuple[npt.NDArray[np.complex128], npt.NDArray[np.float64], npt.NDArray[np.complex128]]:
     """Fourier transforms of u, u', ..., u^(order), with derivatives computed by
     central finite differences in time before transforming.
-    
+
     Args:
         time_series: Uniformly sampled signal u.
         t_vals: Sample times, same length as time_series.

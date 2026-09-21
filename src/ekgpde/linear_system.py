@@ -10,6 +10,9 @@ def build_linear_system(
 ) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
     """Build the real least-squares system A x = b for the ODE coefficients.
 
+    Columns of A are [F(1), F(t), ..., F(t^degree), F(u), F(u'), ...], one row
+    per frequency.
+
     Args:
         u_hat_derivs: Rows F(u), F(u'), ..., from spectral.py.
         polynomial_hats: Rows F(1), F(t), ..., from spectral.py.
@@ -23,7 +26,7 @@ def build_linear_system(
     """
     number_of_terms = polynomial_degree + 1 + len(u_hat_derivs)
     number_of_frequencies = len(u_hat_derivs[0])
-    A = np.zeros((number_of_terms, number_of_frequencies), dtype = np.complex128)
+    A = np.zeros((number_of_terms, number_of_frequencies), dtype=np.complex128)
 
     for k in range(polynomial_degree + 1):
         A[k, :] = polynomial_hats[k]
@@ -36,7 +39,7 @@ def build_linear_system(
     A_real = np.vstack([A.real, A.imag]) # divide complex and real system
 
     #fix final coef to 1 and move to rhs side of equation
-    b_real = -A_real[:, fixed_column].copy() 
+    b_real = -A_real[:, fixed_column].copy()
     A_real = np.delete(A_real, fixed_column, axis=1)
 
     return A_real, b_real

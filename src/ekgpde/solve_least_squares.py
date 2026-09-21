@@ -1,6 +1,7 @@
 import numpy as np
 import numpy.typing as npt
 
+
 def solve_least_squares(
     A: npt.NDArray[np.float64],
     b: npt.NDArray[np.float64],
