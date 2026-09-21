@@ -23,4 +23,3 @@ def solve_least_squares(
     cost = float(np.sum((A @ x - b)**2))
     coefficients = np.insert(x, fixed_column, 1.0)
     return coefficients, cost
-
