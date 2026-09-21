@@ -1,12 +1,14 @@
 import numpy as np
 
 from ekgpde import parameters
-from ekgpde.derivative import derivative
+from ekgpde.differentiation import differentiate
 
 def fourier_least_squares_info(
     time_series: np.ndarray,
     t_vals: np.ndarray,
     polynomal_degree_right: int,
+    differential_equation_order: int,
+    forving_polynomial_degree: int,
     sample_rate: float = 128.0,
     
 
@@ -28,11 +30,7 @@ def fourier_least_squares_info(
     u_hat_derivs = np.zeros((degree_diff_eqn, len(time_series)//2 + 1), dtype=complex)
     for i in range(len(u_derivs)):
         for a in range(len(time_series)):
-            if (a > len(time_series)-i-1):
-                            u_derivs[i][a] = deriv_order_i = derivative(time_series, len(time_series)-i-1, i, 1/sample_rate)
-            else:
-                deriv_order_i = derivative(time_series, a, i, 1/sample_rate)
-                u_derivs[i][a] = deriv_order_i
+            u_derivs[i][a] = differentiate(time_series, a, i, 1/sample_rate)
              
         
         

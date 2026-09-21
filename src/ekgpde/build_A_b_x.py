@@ -1,12 +1,10 @@
 import numpy as np
 
-#from ekgpde import parameters
-
 def build(
         u_hat: np.ndarray,
         w: np.ndarray,
         f_hat: np.ndarray,
-        polynomal_degree_right: int,
+        polynomial_degree_right: int,
         coeficient_equalto_1: int,
     )-> tuple[np.ndarray, np.ndarray]:
     """
@@ -20,23 +18,15 @@ def build(
 
     returns A and b.
     """
-
-    A = np.zeros((3 + polynomal_degree_right + 1, len(u_hat)),dtype=complex)
-
+    A = np.zeros((3 + polynomial_degree_right + 1, len(u_hat)),dtype=complex)
     
-    
-
-    #Her er j komplex og i index. Litt forvirrende notasjon. 
-    A = np.zeros((3 + polynomal_degree_right + 1, len(u_hat)),dtype=complex)
-    for i in range (polynomal_degree_right + 1):
+    for i in range (polynomial_degree_right + 1):
         A[i] = f_hat[i]
 
     for i in range(3):
-        A[i + polynomal_degree_right + 1] = u_hat*(1j*w)**i
+        A[i + polynomial_degree_right + 1] = u_hat*(1j*w)**i
     
-
-    #Tar transponert for å få Matriseegenskaper
-    A = np.transpose(A)
+    A = np.transpose(A) #to give A matrix properties
 
     A_real = np.vstack([
         A.real,
@@ -44,13 +34,6 @@ def build(
     ]) 
     print("Shape A_real")
     print(A_real.shape)
-
-    
-
-
-        
-
-    
 
     b_real = -A_real[:, coeficient_equalto_1].copy()
     
