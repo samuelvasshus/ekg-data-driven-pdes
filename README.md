@@ -1,78 +1,32 @@
-Log
+# ekg-data-driven-pdes
 
-Implementerte forier ting:
-*får ikke like mange frekvenser som
- fourier koefisienter.
-*Må ta hensyn til dette i 
- Least Square Methode mtp nyquist
- har med komplekskonjugert å gjøre
- og siden reelt signal vil 
- komplekskonjugert bare bli kopi. 
- Derfor bruke rfft og rfftfreq for samme lengde. 
+Data-driven identification of differential equations from ECG signals.
+Given a measured ECG time series u(t), we fit a linear ODE
 
+    c₀·u + c₁·u′ + … + cₙ·u⁽ⁿ⁾ + a₀ + a₁·t + … = 0
 
-Implementere build funskjon:
+by least squares in Fourier space, then simulate the identified ODE and compare it with the ECG.
 
-*Vi kan dele opp polynomet ved å ta antall foriertransformer lik
- graden til polynomet + 1.
+## Pipeline
 
-Plotte hjerterytmer 10 sek
-*ser ut som det varierer mye med amplitude. Mye med hvor de forskjellige spikes oppstår
- og i tillegg er det mye variasjon i støy. 
+| Step | Module | What it does |
+|---|---|---|
+| 1. Data | `data.py` | Download ECG segments from PhysioNet and save/load them as `.npz` |
+| 2. Preprocessing | `preprocessing.py` | Gaussian smoothing to damp noise before differentiation |
+| 3. Derivatives | `differentiation.py` | Central finite differences of any order |
+| 4. Fourier transform | `spectral.py` | Fourier transforms of u, u′, u″, … via `(iω)ⁿ` (assumes periodicity) or finite differences (no periodicity needed) |
+| 5. Linear system | `linear_system.py` | Build the real system A x ≈ b, one row per frequency, with one coefficient fixed to 1 |
+| 6. Solve | `solve_least_squares.py` | Least-squares solution and fit cost |
 
-Fremtidig:
-*Leste noe om koplede systemer av diff likninger som reproduserer. Går ann å se på senere.
+Model settings (polynomial degree, ODE order) are in `parameters.py`.
 
-I tillegg noe om å sette høyreside lik en sum sin og cos. Forier aktig. Og ignorere homogen løsning siden disse går mot 0. Og hvis de divergerer gir ikke det mening heller. Hjerterytme hos en frisk person er jo en stabil prosess. U_k = H(ikw_0)*F(k)
-Men hvis man skal se på unormale hjerteslag er sikkert homogen løsning mer interesann. 
-handler om hvordan systemet forsterker og reduserer forskjellige frekvenser.
-hvis H(ikw) er kompleks får man også faseforskyvning.
+## Getting started
 
-U_k omtrent= 1/N * u_hat
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e . numpy matplotlib wfdb
+python scripts/import_ecg.py
+```
 
-Ordenen sier noe om hvor mye intern dynamikk eller hukommelse et system har. 
-
-Planen blir å få det til å fungere med et polynom først. Og deretter kan jeg utforske med sum av sin og cos på høyreside. 
-
-noen ting å huske på:
-
-Hvilke frekvenser:
-samme som fft for time_series
-Da er det hvertfall lett å ta foriertransform og gjøre least square
-Men skal man da gjø least square i det hele tatt?
-
-filtrere bort høye støyfrekvenser.
-Vi bør ikke bruke mange frekvenser. helst samme kompleksitet som venstre side for tolkbarhet. 
-
-
-Least squares:
-Har implementert funksjonalitet for least squares slik at det tar hnsyn til hvilken koefisient man setter = 1. Least square returnerer også cost. 
-
-Første resultat:
-
-Ser ut til å fungere relativt greit. Det er hvertfall riktig størrelsesorden. Litt usikker på det at difflikningen blir kompleks. Er dette siden realdelen av en kompleks difflikning er den beste løsningen, eller er det siden det er så mye støy i dataen. imaginære tall introduserer jo ofte mer sin og cos vil jeg tro, og det kan jo gi mening med EKG som er periodisk. Jeg vil tro at det å ta med imaginære delen blir litt likt som å ha et system av difflikninger. Det blir jo feil men kanskje det kan være interessant. 
-
-
-En feil!
-
-Ikke glattet ut i staten. Når jeg rekner ut initialverdiene blir de utrolig støyete. Jeg må rekne deriverte på en eller annen måte slik at støyen ikke påvirker. Det gjør at hele greia divergerer.
-
-Det virker som om kost funksjonen er feil. Når jeg plotter og ser hva som passer best visuelt, sier costfunksjonen noe helt annet. 
-
-Jeg hadde nå konstan på venstre og konstant på høyre siden polynomaldegree right var 1 automatisk. Får fikse det etterpå. Men kanskje var dette riktig. At jeg hadde litt flaks. Egentlig misforstod jeg, men formen på difflikningen ble a1u + a2u_t + a3u_tt = a4, som var det jeg ville ha. når pol degree = 1. altså konstant. Når jeg setter a2 = 1, får jeg bedre løsning enn a1 = 1. mister periodisitet. 
-
-når a3 tvinges lik 1 divergerer løsningen mot uendelig. 
-
-Bør ha prosentvis skalering for lossfunksjon. Eller noe liknende, siden jeg bare er interessert i å matche shape. I starten skal hvertfall alt være likemye vektlagt å komme nærme.
-
-
-Fikset at konstant kom riktig fremfor ikke bak.
-
-Build fungerer. Testet på lite analytisk tilfelle. 
-
-Formel er riktig så lenge jeg bruker komplexkonjugert. Da vil alt fungere likt som for reel linalg. 
-
-Har konkludert med å bare bruke 0 for derivert i starten. Det gir mening ut fra EKG_bildene. Slipper å ta hensyn til all støyen. 
-
-
-Vi ser ut fra plots at frekvenser rundt under 25 er der iw fungerer. Dette kan vi også se i programmet plot_iw.... 
+Plotting and experiment scripts are in `scripts/`.
