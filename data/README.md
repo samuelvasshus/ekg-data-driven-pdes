@@ -17,3 +17,4 @@ From the repository root, run:
 
 ```bash
 python3 scripts/import_ecg.py
+```
