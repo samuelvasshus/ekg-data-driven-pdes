@@ -2,11 +2,10 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
-from ekgpde.fourier import fourier_least_squares_info
-from ekgpde.build_A_b_x import build
+from ekgpde.spectral import finite_difference_derivatives
+from ekgpde.linear_system import build_linear_system
 
 from ekgpde import parameters
-from ekgpde.new_build_Abx import new_build
 
 data = np.load("data/processed/nsrdb_18_records_10s.npz")
 
@@ -23,9 +22,9 @@ record_name = record_names[0]
 
 
 
-DFT_coef, omegas, DFT_right_side = fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
+DFT_coef, omegas, DFT_right_side = finite_difference_derivatives(time_series, time, parameters.degree_of_differential_equation, parameters.polynomal_degree_right) 
 
-A, b = new_build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,1)
+A, b = build_linear_system(DFT_coef, DFT_right_side, parameters.polynomal_degree_right, 1)
 
 print("A:")
 print(A.shape)
@@ -39,7 +38,7 @@ print(b)
 DFT_coef, omegas, DFT_right_side = np.ones(5, dtype=complex), np.ones(5, dtype=complex), np.ones(5, dtype=complex)
 
 
-A1, b1 = new_build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,1)
+A1, b1 = build_linear_system(DFT_coef, DFT_right_side, parameters.polynomal_degree_right, 1)
 
 print("A1:")
 print(A1.shape)

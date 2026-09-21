@@ -2,7 +2,7 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
-from ekgpde.fourier import fourier_least_squares_info
+from ekgpde.spectral import finite_difference_derivatives
 from ekgpde import parameters
 
 DATA_PATH = Path("data/processed/nsrdb_18_records_10s.npz")
@@ -17,7 +17,7 @@ time = data["time"]
 time_series = ecg_signals[0]
 record_name = record_names[0]
 
-DFT_coef, omegas, DFT_right_side = fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
+DFT_coef, omegas, DFT_right_side = finite_difference_derivatives(time_series, time, parameters.degree_of_differential_equation, parameters.polynomal_degree_right) 
 
 print("Shape and DFT_coef")
 print(DFT_coef.shape)

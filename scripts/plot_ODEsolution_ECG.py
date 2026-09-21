@@ -2,10 +2,10 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
-from ekgpde.fourier import fourier_least_squares_info
-from ekgpde.build_A_b_x import build
-from ekgpde.solve_least_squares import solve_least_square
-from ekgpde.derivative import derivative
+from ekgpde.spectral import spectral_derivatives
+from ekgpde.linear_system import build_linear_system
+from ekgpde.solve_least_squares import solve_least_squares
+from ekgpde.differentiation import differentiate
 
 from ekgpde import parameters
 
@@ -25,11 +25,11 @@ for series_index in range(5):
 
 
     coeficient_equal_1 = 1
-    DFT_coef, omegas, DFT_right_side = fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
+    DFT_coef, omegas, DFT_right_side = spectral_derivatives(time_series, time, 2, parameters.polynomal_degree_right) 
 
-    A, b = build(DFT_coef, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
+    A, b = build_linear_system(DFT_coef, DFT_right_side, parameters.polynomal_degree_right, coeficient_equal_1)
 
-    u_coeficients, cost = solve_least_square(A, b, coeficient_equal_1)
+    u_coeficients, cost = solve_least_squares(A, b, coeficient_equal_1)
 
     print("Cost:")
     print(cost)
@@ -46,7 +46,7 @@ for series_index in range(5):
     dt = time[1]- time[0]
     t = 0
 
-    Y = np.array([time_series[0], derivative(time_series, 0, 1, dt)])
+    Y = np.array([time_series[0], differentiate(time_series, 0, 1, dt)])
     Y_vals = [Y.copy()]
 
     t = time[0]

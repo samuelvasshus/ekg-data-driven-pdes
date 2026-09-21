@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from ekgpde.convolution import convolution_gaussian
-from ekgpde.fourier import fourier_least_squares_info
+from ekgpde.preprocessing import gaussian_smooth
+from ekgpde.spectral import finite_difference_derivatives
 from ekgpde import parameters
 
 
@@ -27,7 +27,7 @@ for series_index in range(3):
 
     time_series_original = ecg_signals[series_index]
 
-    time_series_original = convolution_gaussian(
+    time_series_original = gaussian_smooth(
         time_series_original,
         2,
         3
@@ -87,11 +87,11 @@ for series_index in range(3):
     # ---------------------------------------------------
 
     new_method, omegas_new, DFT_right_side = (
-        fourier_least_squares_info(
+        finite_difference_derivatives(
             time_series,
             time,
+            number_of_orders,
             parameters.polynomal_degree_right,
-            sample_rate=sample_rate
         )
     )
 
