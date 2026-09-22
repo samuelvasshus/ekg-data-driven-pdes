@@ -1,3 +1,7 @@
+📄 **[Statusrapport for EKG-prosjektet (PDF)](docs/statusrapport.pdf)**
+
+
+
 Log
 
 Implementerte forier ting:
@@ -76,3 +80,5 @@ Har konkludert med å bare bruke 0 for derivert i starten. Det gir mening ut fra
 
 
 Vi ser ut fra plots at frekvenser rundt under 25 er der iw fungerer. Dette kan vi også se i programmet plot_iw.... 
+
+La til coef table for å se på difflikningene. Det ser ut som at difflikningen nesten blir helt lik for alle tilfeller der vi har en regelmessig hjerterytme. 
