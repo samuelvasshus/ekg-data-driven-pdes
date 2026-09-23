@@ -7,6 +7,14 @@ name = "ekgpde"
 version = "0.1.0"
 description = "Data-driven ODE/PDE tools for ECG time series"
 requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "wfdb",
+]
+
+[project.optional-dependencies]
+dev = ["jupyter"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

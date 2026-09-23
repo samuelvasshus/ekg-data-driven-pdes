@@ -2,12 +2,11 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
-from ekgpde.convolution import convolution_gaussian
-from ekgpde.fourier import fourier_least_squares_info
-from ekgpde.build_A_b_x import build
-from ekgpde.new_build_Abx import new_build
-from ekgpde.solve_least_squares import solve_least_square
-from ekgpde.derivative import derivative
+from ekgpde.preprocessing import gaussian_smooth
+from ekgpde.spectral import finite_difference_derivatives
+from ekgpde.linear_system import build_linear_system
+from ekgpde.solve_least_squares import solve_least_squares
+from ekgpde.differentiation import differentiate
 
 from ekgpde import parameters
 
@@ -24,15 +23,15 @@ sampling_rate = data["sampling_rate"]
 for series_index in range(3):
     time_series_original = ecg_signals[series_index]
     time_series = time_series_original[0:int(len(time_series_original)/2)]
-    time_series_original = convolution_gaussian(time_series_original, 2, 3)
+    time_series_original = gaussian_smooth(time_series_original, 2, 3)
     record_name = record_names[series_index]
-    time_series = convolution_gaussian(time_series, 2, 3)
+    time_series = gaussian_smooth(time_series, 2, 3)
 
 
 
     coeficient_equal_1 = 1
    
-    DFT_coef, omegas, DFT_right_side = fourier_least_squares_info(time_series,time, parameters.polynomal_degree_right) 
+    DFT_coef, omegas, DFT_right_side = finite_difference_derivatives(time_series, time, parameters.degree_of_differential_equation, parameters.polynomal_degree_right) 
 
     frequency = 5
 
@@ -56,9 +55,9 @@ for series_index in range(3):
         i += 1
 
     
-    A, b = new_build(DFT_coef_copy, omegas, DFT_right_side, parameters.polynomal_degree_right,coeficient_equal_1)
+    A, b = build_linear_system(DFT_coef_copy, DFT_right_side, parameters.polynomal_degree_right, coeficient_equal_1)
 
-    u_coeficients, cost = solve_least_square(A, b, coeficient_equal_1)
+    u_coeficients, cost = solve_least_squares(A, b, coeficient_equal_1)
 
     print("Cost:")
     print(cost)
@@ -80,9 +79,9 @@ for series_index in range(3):
     dt = time[1]- time[0]
     t = 0
 
-    #Y = np.array([time_series[0], derivative(time_series, 0, 1, dt)])
+    #Y = np.array([time_series[0], differentiate(time_series, 0, 1, dt)])
     #print("Deriv value:")
-    #print(derivative(time_series, 0, 1, dt))
+    #print(differentiate(time_series, 0, 1, dt))
     Y = np.zeros((parameters.degree_of_differential_equation))
     Y[0] = time_series[0]
     Y_vals = [Y.copy()]

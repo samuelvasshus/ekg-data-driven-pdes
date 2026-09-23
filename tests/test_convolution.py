@@ -2,7 +2,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from ekgpde.convolution import convolution_gaussian
+from ekgpde.preprocessing import gaussian_smooth
 
 data = np.load("data/processed/nsrdb_18_records_10s.npz")
 
@@ -30,7 +30,7 @@ for i in range(5):
     if signal.ndim == 2:
         signal = signal[:, 0]
 
-    signal = convolution_gaussian(signal, 10)
+    signal = gaussian_smooth(signal, 10, 30)
 
     plt.figure(figsize=(14, 5))
     plt.plot(time, signal)
