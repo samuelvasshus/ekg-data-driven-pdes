@@ -1,11 +1,13 @@
 # ekg-data-driven-pdes
-
 Data-driven identification of differential equations from ECG signals.
 Given a measured ECG time series u(t), we fit a linear ODE
 
     c₀·u + c₁·u′ + … + cₙ·u⁽ⁿ⁾ + a₀ + a₁·t + … = 0
 
 by least squares in Fourier space, then simulate the identified ODE and compare it with the ECG.
+
+##Reports
+📄 **[Statusrapport for EKG-prosjektet (PDF)](docs/statusrapport.pdf)**
 
 ## Pipeline
 
